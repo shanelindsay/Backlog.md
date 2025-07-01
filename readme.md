@@ -93,6 +93,11 @@ Key options:
 | `statuses`        | Board columns      | `[To Do, In Progress, Done]`  |
 | `date_format`     | ISO or locale      | `yyyy-mm-dd`                  |
 
+### Editor
+
+Interactive task view can open the current task in your preferred editor by pressing `E`.
+Configure the editor by setting `BACKLOG_EDITOR`, or rely on `VISUAL`/`EDITOR` environment variables.
+
 ---
 
 

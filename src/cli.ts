@@ -479,12 +479,13 @@ taskCmd
 			}
 
 			// Use enhanced viewer with filtered tasks and custom title
-			await viewTaskEnhanced(firstTask, initialContent, {
-				tasks: filtered,
-				core,
-				title,
-				filterDescription,
-			});
+                        await viewTaskEnhanced(firstTask, initialContent, {
+                                tasks: filtered,
+                                core,
+                                title,
+                                filterDescription,
+                                filePath,
+                        });
 		}
 	});
 
@@ -675,8 +676,11 @@ taskCmd
 		}
 
 		// Use enhanced task viewer with detail focus
-		await viewTaskEnhanced(task, content, { startWithDetailFocus: true });
-	});
+                await viewTaskEnhanced(task, content, {
+                        startWithDetailFocus: true,
+                        filePath,
+                });
+        });
 
 taskCmd
 	.command("archive <taskId>")
@@ -742,8 +746,11 @@ taskCmd
 		}
 
 		// Use enhanced task viewer with detail focus
-		await viewTaskEnhanced(task, content, { startWithDetailFocus: true });
-	});
+                await viewTaskEnhanced(task, content, {
+                        startWithDetailFocus: true,
+                        filePath,
+                });
+        });
 
 const draftCmd = program.command("draft");
 

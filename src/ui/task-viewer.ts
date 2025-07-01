@@ -10,6 +10,7 @@ import { createGenericList } from "./components/generic-list.ts";
 import { formatHeading } from "./heading.ts";
 import { formatStatusWithIcon, getStatusColor } from "./status-icon.ts";
 import { createScreen } from "./tui.ts";
+import { openFileInEditor } from "../utils/editor.ts";
 
 function getPriorityDisplay(priority?: "high" | "medium" | "low"): string {
 	switch (priority) {
@@ -81,15 +82,16 @@ function extractImplementationNotesSection(content: string): string | null {
  * Display task details in a split-pane UI with task list on left and detail on right
  */
 export async function viewTaskEnhanced(
-	task: Task,
-	content: string,
-	options: {
-		tasks?: Task[];
-		core?: Core;
-		title?: string;
-		filterDescription?: string;
-		startWithDetailFocus?: boolean;
-	} = {},
+        task: Task,
+        content: string,
+        options: {
+                tasks?: Task[];
+                core?: Core;
+                title?: string;
+                filterDescription?: string;
+                startWithDetailFocus?: boolean;
+                filePath?: string;
+        } = {},
 ): Promise<void> {
 	if (output.isTTY === false) {
 		console.log(formatTaskPlainText(task, content));
@@ -103,8 +105,9 @@ export async function viewTaskEnhanced(
 
 	// Find the initial selected task index
 	const initialIndex = allTasks.findIndex((t) => t.id === task.id);
-	let currentSelectedTask = task;
-	let currentSelectedContent = content;
+        let currentSelectedTask = task;
+        let currentSelectedContent = content;
+        let currentSelectedFilePath: string | null = options.filePath || null;
 
 	const screen = createScreen({ title: options.title || "Backlog Tasks" });
 
@@ -176,20 +179,23 @@ export async function viewTaskEnhanced(
 			currentSelectedTask = selectedTask;
 			// Load the content for the selected task asynchronously
 			(async () => {
-				try {
-					const files = await Array.fromAsync(new Bun.Glob("*.md").scan({ cwd: core.filesystem.tasksDir }));
-					const normalizedId = selectedTask.id.startsWith("task-") ? selectedTask.id : `task-${selectedTask.id}`;
-					const taskFile = files.find((f) => f.startsWith(`${normalizedId} -`));
+                                try {
+                                        const files = await Array.fromAsync(new Bun.Glob("*.md").scan({ cwd: core.filesystem.tasksDir }));
+                                        const normalizedId = selectedTask.id.startsWith("task-") ? selectedTask.id : `task-${selectedTask.id}`;
+                                        const taskFile = files.find((f) => f.startsWith(`${normalizedId} -`));
 
-					if (taskFile) {
-						const filePath = `${core.filesystem.tasksDir}/${taskFile}`;
-						currentSelectedContent = await Bun.file(filePath).text();
-					} else {
-						currentSelectedContent = "";
-					}
-				} catch (error) {
-					currentSelectedContent = "";
-				}
+                                        if (taskFile) {
+                                                const filePath = `${core.filesystem.tasksDir}/${taskFile}`;
+                                                currentSelectedFilePath = filePath;
+                                                currentSelectedContent = await Bun.file(filePath).text();
+                                        } else {
+                                                currentSelectedFilePath = null;
+                                                currentSelectedContent = "";
+                                        }
+                                } catch (error) {
+                                        currentSelectedFilePath = null;
+                                        currentSelectedContent = "";
+                                }
 
 				// Refresh the detail pane
 				refreshDetailPane();
@@ -405,20 +411,30 @@ export async function viewTaskEnhanced(
 
 	return new Promise<void>((resolve) => {
 		// Footer hint line
-		const helpBar = blessed.box({
-			parent: screen,
-			bottom: 0,
-			left: 0,
-			width: "100%",
-			height: 1,
-			content: options.filterDescription
-				? ` Filter: ${options.filterDescription} · ↑/↓ navigate · ← task list · → detail · Tab toggle · q/Esc quit `
-				: " ↑/↓ navigate · ← task list · → detail · Tab toggle · q/Esc quit ",
-			style: {
-				fg: "gray",
-				bg: "black",
-			},
-		});
+                const helpBar = blessed.box({
+                        parent: screen,
+                        bottom: 0,
+                        left: 0,
+                        width: "100%",
+                        height: 1,
+                        content: options.filterDescription
+                                ? ` Filter: ${options.filterDescription} · ↑/↓ navigate · ← task list · → detail · Tab toggle · q/Esc quit `
+                                : " ↑/↓ navigate · ← task list · → detail · Tab toggle · q/Esc quit ",
+                        style: {
+                                fg: "gray",
+                                bg: "black",
+                        },
+                });
+
+                const defaultHelp = helpBar.content;
+                const showTempMessage = (msg: string) => {
+                        helpBar.setContent(` ${msg} `);
+                        screen.render();
+                        setTimeout(() => {
+                                helpBar.setContent(defaultHelp);
+                                screen.render();
+                        }, 2000);
+                };
 
 		// Focus management
 		let focusIndex = 0; // 0 = task list, 1 = detail pane
@@ -469,9 +485,30 @@ export async function viewTaskEnhanced(
 			updateFocus(0); // Always go to task list
 		});
 
-		screen.key(["right", "l"], () => {
-			updateFocus(1); // Always go to detail pane
-		});
+                screen.key(["right", "l"], () => {
+                        updateFocus(1); // Always go to detail pane
+                });
+
+                // Open task file in editor
+                screen.key(["e", "E"], async () => {
+                        if (!currentSelectedFilePath) {
+                                showTempMessage("Task file not found");
+                                return;
+                        }
+
+                        if (!process.env.BACKLOG_EDITOR && !process.env.VISUAL && !process.env.EDITOR) {
+                                showTempMessage("No editor configured (BACKLOG_EDITOR/VISUAL/EDITOR)");
+                                return;
+                        }
+
+                        screen.destroy();
+                        try {
+                                await openFileInEditor(currentSelectedFilePath);
+                        } catch (err) {
+                                console.error((err as Error).message);
+                        }
+                        resolve();
+                });
 
 		// Exit keys
 		screen.key(["escape", "q", "C-c"], () => {
