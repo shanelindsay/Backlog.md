@@ -365,7 +365,7 @@ export class FileSystem {
 
 	private async loadUserSettings(global = false): Promise<Record<string, string> | null> {
 		const filePath = global
-			? join(homedir(), ".backlog", DEFAULT_FILES.USER)
+			? join(homedir(), "backlog", DEFAULT_FILES.USER)
 			: join(this.projectRoot, DEFAULT_FILES.USER);
 		try {
 			const content = await Bun.file(filePath).text();
@@ -390,7 +390,7 @@ export class FileSystem {
 
 	private async saveUserSettings(settings: Record<string, string>, global = false): Promise<void> {
 		const filePath = global
-			? join(homedir(), ".backlog", DEFAULT_FILES.USER)
+			? join(homedir(), "backlog", DEFAULT_FILES.USER)
 			: join(this.projectRoot, DEFAULT_FILES.USER);
 		await this.ensureDirectoryExists(dirname(filePath));
 		const lines = Object.entries(settings).map(([k, v]) => `${k}: ${v}`);

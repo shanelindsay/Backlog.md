@@ -53,7 +53,7 @@ export async function loadRemoteTasks(
 
 			try {
 				// List files in the branch
-				const files = await gitOps.listFilesInTree(ref, ".backlog/tasks");
+				const files = await gitOps.listFilesInTree(ref, "backlog/tasks");
 
 				if (files.length === 0) {
 					return [];

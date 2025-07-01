@@ -10,7 +10,7 @@ backlog
 
 # Development files
 .github/
-.backlog/
+backlog/
 .claude/
 .git/
 .gitignore

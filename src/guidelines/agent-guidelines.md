@@ -2,7 +2,7 @@
 
 ## 1. Source of Truth
 
-- Tasks live under **`.backlog/tasks/`** (drafts under **`.backlog/drafts/`**).
+- Tasks live under **`backlog/tasks/`** (drafts under **`backlog/drafts/`**).
 - Every implementation decision starts with reading the corresponding Markdown task file.
 
 ## 2. Typical Workflow

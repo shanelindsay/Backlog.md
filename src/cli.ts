@@ -109,7 +109,7 @@ program
 
 			// if (reporter) {
 			// 	if (storeGlobal) {
-			// 		const globalPath = join(homedir(), ".backlog", "user");
+			// 		const globalPath = join(homedir(), "backlog", "user");
 			// 		await mkdir(dirname(globalPath), { recursive: true });
 			// 		await Bun.write(globalPath, `default_reporter: "${reporter}"\n`);
 			// 	} else {
@@ -144,7 +144,7 @@ async function generateNextId(core: Core, parent?: string): Promise<string> {
 
 		// Load files from all branches in parallel
 		const branchFilePromises = branches.map(async (branch) => {
-			const files = await core.gitOps.listFilesInTree(branch, ".backlog/tasks");
+			const files = await core.gitOps.listFilesInTree(branch, "backlog/tasks");
 			return files
 				.map((file) => {
 					const match = file.match(/task-([\d.]+)/);
