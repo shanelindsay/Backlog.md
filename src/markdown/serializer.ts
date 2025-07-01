@@ -111,3 +111,34 @@ export function updateTaskImplementationPlan(content: string, plan: string): str
 	// If no Description section found, add at the end
 	return `${content}\n\n${newSection}`;
 }
+
+export function updateTaskDescription(content: string, description: string): string {
+	const descRegex = /## Description\s*\n([\s\S]*?)(?=\n## |$)/i;
+	const newSection = `## Description\n\n${description}`;
+
+	if (descRegex.test(content)) {
+		return content.replace(descRegex, newSection);
+	}
+
+	const firstSection = content.match(/## [^\n]+\n/);
+	if (firstSection && firstSection.index !== undefined) {
+		return `${content.slice(0, firstSection.index)}${newSection}\n\n${content.slice(firstSection.index)}`;
+	}
+
+	return newSection;
+}
+
+export function updateTaskImplementationNotes(content: string, notes: string): string {
+	if (!notes || !notes.trim()) {
+		return content;
+	}
+
+	const notesRegex = /## Implementation Notes\s*\n([\s\S]*?)(?=\n## |$)/i;
+	const newSection = `## Implementation Notes\n\n${notes}`;
+
+	if (notesRegex.test(content)) {
+		return content.replace(notesRegex, newSection);
+	}
+
+	return `${content}\n\n${newSection}`;
+}
