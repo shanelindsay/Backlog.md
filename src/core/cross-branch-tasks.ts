@@ -42,9 +42,9 @@ export async function getLatestTaskStatesForIds(
 
 		// Create all file path combinations we need to check
 		const directoryChecks: Array<{ path: string; type: TaskDirectoryType }> = [
-			{ path: ".backlog/tasks", type: "task" },
-			{ path: ".backlog/drafts", type: "draft" },
-			{ path: ".backlog/archive/tasks", type: "archived" },
+			{ path: "backlog/tasks", type: "task" },
+			{ path: "backlog/drafts", type: "draft" },
+			{ path: "backlog/archive/tasks", type: "archived" },
 		];
 
 		// Flatten all checks into a single array for maximum parallelization

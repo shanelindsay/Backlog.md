@@ -4,7 +4,7 @@
 
 ```markdown
 backlog.md/ (Root folder for "Backlog.md" project)
-└── .backlog/ ("Backlog.md" folder for managing tasks and docs)
+└── backlog/ ("Backlog.md" folder for managing tasks and docs)
     ├── drafts/ (list of tasks that are not ready to be implemented)
     ├── tasks/ (list of tasks that are ready to be implemented)
     ├── archive/ (tasks that are no longer relevant)
@@ -21,7 +21,7 @@ Each folder contains a `README.md` file with instructions on how to use the Back
 
 ## 1. Source of Truth
 
-- Tasks live under **`.backlog/tasks/`** (drafts under **`.backlog/drafts/`**).
+- Tasks live under **`backlog/tasks/`** (drafts under **`backlog/drafts/`**).
 - Each has YAML frontmatter & markdown content.
 - The task **markdown file** defines what to implement.
 

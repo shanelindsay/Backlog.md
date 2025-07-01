@@ -26,9 +26,9 @@ Define the initial Backlog working directory structure and create the first set 
 
 ## Acceptance Criteria (Optional)
 
-- [x] `.backlog` directory structure created.
+- [x] `backlog` directory structure created.
 - [x] Initial `config.yml` created.
-- [x] Markdown task files for Milestones 1, 2, and 3 high-level tasks created in `.backlog/tasks/` or `.backlog/draft/`.
+- [x] Markdown task files for Milestones 1, 2, and 3 high-level tasks created in `backlog/tasks/` or `backlog/draft/`.
 - [x] All initial tasks committed to the Git repository.
 - [x] `agents.md` file for AI Agent instructions
 

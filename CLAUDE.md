@@ -21,7 +21,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```markdown
 backlog.md/ (Root folder for "Backlog.md" project)
-└── .backlog/ ("Backlog.md" folder for managing tasks and docs)
+└── backlog/ ("Backlog.md" folder for managing tasks and docs)
     ├── drafts/ (list of tasks that are not ready to be implemented)
     ├── tasks/ (list of tasks that are ready to be implemented)
     ├── archive/ (tasks that are no longer relevant)
@@ -44,7 +44,7 @@ This is the **Backlog.md** project - a lightweight git + markdown project manage
 
 - **CLI Tool**: Built with Bun and TypeScript as a global npm package (`@backlog.md`)
 - **Source Code**: Located in `/src` directory with modular TypeScript structure
-- **Task Management**: Uses markdown files in `.backlog/` directory structure
+- **Task Management**: Uses markdown files in `backlog/` directory structure
 - **Workflow**: Git-integrated with task IDs referenced in commits and PRs
 
 ### Key Components
@@ -56,7 +56,7 @@ This is the **Backlog.md** project - a lightweight git + markdown project manage
 ### AI Agent Integration
 
 - Reference task IDs in commit messages and PR titles when implementing features
-- Use `.backlog/tasks/` markdown files to understand implementation requirements
+- Use `backlog/tasks/` markdown files to understand implementation requirements
 - Include a `## Description` section and a `## Acceptance Criteria` checklist in every task file
 - Add an `## Implementation Plan` section before starting work to outline your approach
 - Use `--ac` flag when creating tasks to set acceptance criteria directly

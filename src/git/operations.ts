@@ -80,7 +80,7 @@ export class GitOperations {
 	}
 
 	async stageBacklogDirectory(): Promise<void> {
-		await this.execGit(["add", ".backlog/"]);
+		await this.execGit(["add", "backlog/"]);
 	}
 
 	async commitBacklogChanges(message: string): Promise<void> {
