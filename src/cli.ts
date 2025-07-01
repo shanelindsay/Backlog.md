@@ -610,6 +610,40 @@ taskCmd
 	});
 
 taskCmd
+	.command("describe <taskId> <text>")
+	.description("set or replace task description")
+	.action(async (taskId: string, text: string) => {
+		const cwd = process.cwd();
+		const core = new Core(cwd);
+		const task = await core.filesystem.loadTask(taskId);
+		if (!task) {
+			console.error(`Task ${taskId} not found.`);
+			return;
+		}
+		const { updateTaskDescription } = await import("./markdown/serializer.ts");
+		task.description = updateTaskDescription(task.description, text);
+		await core.updateTask(task, true);
+		console.log(`Updated description for ${task.id}`);
+	});
+
+taskCmd
+	.command("notes <taskId> <text>")
+	.description("set implementation notes")
+	.action(async (taskId: string, text: string) => {
+		const cwd = process.cwd();
+		const core = new Core(cwd);
+		const task = await core.filesystem.loadTask(taskId);
+		if (!task) {
+			console.error(`Task ${taskId} not found.`);
+			return;
+		}
+		const { updateTaskImplementationNotes } = await import("./markdown/serializer.ts");
+		task.description = updateTaskImplementationNotes(task.description, text);
+		await core.updateTask(task, true);
+		console.log(`Updated implementation notes for ${task.id}`);
+	});
+
+taskCmd
 	.command("view <taskId>")
 	.description("display task details")
 	.option("--plain", "use plain text output instead of interactive UI")

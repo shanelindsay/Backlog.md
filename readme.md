@@ -64,6 +64,8 @@ All data is saved under `.backlog` folder as human‑readable Markdown with the 
 | Add plan    | `backlog task edit 7 --plan "Implementation approach"`    |
 | Add AC      | `backlog task edit 7 --ac "New criterion,Another one"`    |
 | Add deps    | `backlog task edit 7 --dep task-1 --dep task-2`     |
+| Set description | `backlog task describe 7 "New details"` |
+| Add notes   | `backlog task notes 7 "Learnings"` |
 | Archive     | `backlog task archive 7`                             |
 | Draft flow  | `backlog draft create "Spike GraphQL"` → `backlog draft promote 3.1` |
 | Demote to draft| `backlog task demote <id>` |
