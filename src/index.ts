@@ -28,3 +28,4 @@ export {
 	type AgentInstructionFile,
 	_loadAgentGuideline,
 } from "./agent-instructions.ts";
+export { openFileInEditor } from "./utils/editor.ts";
